@@ -1,18 +1,25 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useUserStore } from '../lib/userStore'; // <<< Import user store
+
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const { email, clearEmail } = useUserStore();
 
   const handleLogout = () => {
     // Untuk dummy, logout langsung ke login
+    clearEmail(); // <<< Clear email from store
     router.replace('/login');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Dashboard 🏠</Text>
-      <Text style={styles.subtitle}>Welcome to your dashboard!</Text>
+      <Text style={styles.subtitle}>
+        {email ? `Logged in as: ${email}` : 'No user info'}
+     </Text>
+
 
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Logout</Text>

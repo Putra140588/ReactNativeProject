@@ -3,9 +3,12 @@ import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons'; // <- Tambahan icon
 import { login } from '../lib/authService'; // <<< Import service login
+import { useUserStore } from '../lib/userStore'; // <<< Tambah ini
+
 
 export default function LoginScreen() {
   const router = useRouter();
+  const {setEmail:setUserEmail } = useUserStore(); // <<< Ambil dari store
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -15,6 +18,7 @@ export default function LoginScreen() {
     try{
         setLoading(true);
         const res: any = await login({ email, password });
+        setUserEmail(res.user.email); // <<< Simpan email ke store
         console.log('Login success:', res);
         Alert.alert('Success', `Welcome, ${res.user.email}!`);
         router.replace('/dashboard'); // Nanti kita buat dashboard
